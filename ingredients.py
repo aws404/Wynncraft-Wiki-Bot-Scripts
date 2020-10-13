@@ -1,6 +1,4 @@
 import wynn
-import mwparserfromhell
-import mwclient
 import common
 from river_mwclient.gamepedia_client import GamepediaClient
 from river_mwclient.auth_credentials import AuthCredentials
