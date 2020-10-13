@@ -11,5 +11,10 @@ The following files in **the same directory as your code**:
 * `password_me.txt` - your bot password this will be a long string of characters from Special:BotPasswords
 
 ## Scripts
-#### `Ingredients.py`
+### `Ingredients.py`
 This script is used to update the templates 'Template:Infobox/Ingredient' and 'Template:Crafting', running it will update all content pages that use these templates.
+#### Example
+If no arguments are supplied, the script will update all instanced of the template, for example:  
+```python ingredients.py```  
+A set of one or more pages can also be specified to update, for example:  
+```python ingredients.py Rotten_Flesh Grook_Feather Corrupted_Fragment```  
