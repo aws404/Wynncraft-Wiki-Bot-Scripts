@@ -1,9 +1,17 @@
 # Wynncraft Wiki Bot Scripts
+This is a collection of scripts that can be used to maintain the Wynncraft Wiki (https://wynncraft.gamepedia.com)
 
 ## Required Libraries
-1. 'wynn.py Wynncrfat API Wrapper' (https://github.com/Zakru/wynn.py) - `pip install -U git+git://github.com/Zakru/wynn.py`
-2. 'River's Gamepedia API Wrapper' (https://github.com/RheingoldRiver/river_mwclient) - `pip install -U git+git://github.com/RheingoldRiver/river_mwclient`
-3. 'Python Requests Library' = `pip install requests`
+### wynn.py Wynncraft API Wrapper
+* Link: https://github.com/Zakru/wynn.py
+* Install Command: `pip install -U git+git://github.com/Zakru/wynn.py`
+
+### River's Gamepedia API Wrapper 
+* Link: https://github.com/RheingoldRiver/river_mwclient) 
+* Install Command: `pip install -U git+git://github.com/RheingoldRiver/river_mwclient`
+
+### Python Requests Library
+* Install Command: `pip install requests`
 
 ## Setup
 The following files in **the same directory as your code**:
@@ -12,9 +20,13 @@ The following files in **the same directory as your code**:
 
 ## Scripts
 ### `Ingredients.py`
-This script is used to update the templates 'Template:Infobox/Ingredient' and 'Template:Crafting', running it will update all content pages that use these templates.
+This script is used to update the templates 'Template:Infobox/Ingredient' and 'Template:Crafting', using data from the Offical Wynncraft API.
 #### Example
 If no arguments are supplied, the script will update all instanced of the template, for example:  
-```python ingredients.py```  
+```
+python ingredients.py
+```  
 A set of one or more pages can also be specified to update, for example:  
-```python ingredients.py Rotten_Flesh Grook_Feather Corrupted_Fragment```  
+```
+python ingredients.py Rotten_Flesh Grook_Feather Corrupted_Fragment
+```  
