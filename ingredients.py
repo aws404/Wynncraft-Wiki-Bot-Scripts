@@ -84,5 +84,10 @@ print("Connecting to Wynncraft Wiki...")
 credentials = AuthCredentials(user_file="me")
 wiki = GamepediaClient('wynncraft', credentials=credentials)
 print("Connected!")
-IngredientInfoboxModifier(wiki, 'Infobox/Ingredient', summary='Bot edit, update ingredient infobox template', title_list=sys.argv[1:]).run()
-IngredientCraftingModifier(wiki, 'Crafting', summary='Bot edit, update ingredient crafting template', title_list=sys.argv[1:]).run()
+
+if len(sys.argv[1:]) > 0:
+    IngredientInfoboxModifier(wiki, 'Infobox/Ingredient', summary='Bot edit, update ingredient infobox template', title_list=sys.argv[1:]).run()
+    IngredientCraftingModifier(wiki, 'Crafting', summary='Bot edit, update ingredient crafting template', title_list=sys.argv[1:]).run()
+else:
+    IngredientInfoboxModifier(wiki, 'Infobox/Ingredient', summary='Bot edit, update ingredient infobox template').run()
+    IngredientCraftingModifier(wiki, 'Crafting', summary='Bot edit, update ingredient crafting template').run()

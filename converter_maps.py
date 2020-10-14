@@ -51,3 +51,95 @@ v2_to_wiki = {
     "duration": "duration",
     "charges": "charges"
 }
+
+"""
+Conversion from legacy api keys to wiki identification keys, a key ending in '-' is used to define a key wich should be taken as a literal (not rounded)
+"""
+v1_to_wiki = {
+    "healthRegen": "%_health_regen",
+    "manaRegen": "mana_regen",
+    "spellDamage": "%_spell_damage",
+    "damageBonus": "%_melee_damage",
+    "lifeSteal": "life_steal",
+    "manaSteal": "mana_steal",
+    "xpBonus": "xp_bonus",
+    "lootBonus": "loot_bonus",
+    "lootQuality": "loot_quality",
+    "reflection": "reflection",
+    "strengthPoints": "strength-",
+    "dexterityPoints": "dexterity-",
+    "intelligencePoints": "intelligence-",
+    "agilityPoints": "agility-",
+    "defensePoints": "defense-",
+    "thorns": "thorns",
+    "exploding": "exploding",
+    "speed": "walk_speed",
+    "attackSpeedBonus": "attack_speed",
+    "poison": "poison",
+    "healthBonus": "health",
+    "soulPoints": "soul_point_regen",
+    "emeraldStealing": "stealing",
+    "healthRegenRaw": "raw_health_regen",
+    "spellDamageRaw": "raw_spell_damage",
+    "damageBonusRaw": "raw_melee_damage",
+    "bonusFireDamage": "fire_damage",
+    "bonusWaterDamage": "water_damage",
+    "bonusAirDamage": "air_damage",
+    "bonusThunderDamage": "thunder_damage",
+    "bonusEarthDamage": "earth_damage",
+    "bonusFireDefense": "fire_defense",
+    "bonusWaterDefense": "water_defense",
+    "bonusAirDefense": "air_defense",
+    "bonusThunderDefense": "thunder_defense",
+    "bonusEarthDefense": "earth_defense",
+    "sprintRegen": "sprint_regen",
+    "spellCostPct1": "%_first_spell_cost",
+    "spellCostPct2": "%_second_spell_cost",
+    "spellCostPct3": "%_third_spell_cost",
+    "spellCostPct4": "%_fourth_spell_cost",
+    "spellCostRaw1": "raw_first_spell_cost",
+    "spellCostRaw2": "raw_second_spell_cost",
+    "spellCostRaw3": "raw_third_spell_cost",
+    "spellCostRaw4": "raw_fourth_spell_cost",
+    "gatherXpBonus": "gathering_xp_bonus",
+    "gatherSpeed": "gathering_speed"
+}
+
+"""
+Conversion from legacy api keys to item infobox keys, if these keys end with a +, a plus will be appended to posative numbers
+"""
+item_info_box = {
+    "displayName": "name",
+    "name": "name",
+    "tier": "type",
+    "type": "item",
+    "level": "level",
+    "sockets": "slots",
+    "attackSpeed": "speed",
+    "addedLore": "lore",
+    "strength": "r_strength",
+    "dexterity": "r_dexterity",
+    "intelligence": "r_intelligence",
+    "defense": "r_defense",
+    "agility": "r_agility",
+    "damage": "damage",
+    "earthDamage": "earth",
+    "thunderDamage": "thunder",
+    "waterDamage": "water",
+    "fireDamage": "fire",
+    "airDamage": "air",
+    "quest": "r_quest",
+    "health": "health+",
+    "earthDefense": "earth+",
+    "thunderDefense": "thunder+",
+    "waterDefense": "water+",
+    "fireDefense": "fire+",
+    "airDefense": "air+",
+    "classRequirement": "class",
+    "armorType": "material",
+    "armorColor": "color",
+    "restrictions": "tag"
+}
+
+
+
