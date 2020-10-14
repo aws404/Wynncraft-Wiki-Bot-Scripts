@@ -31,7 +31,7 @@ A set of one or more pages can also be specified to update, for example:
 python ingredients.py Rotten_Flesh Grook_Feather Corrupted_Fragment
 ```  
 
-# `items.py`
+### `items.py`
 This script is used to update all the 'Template:Infobox/Armour', 'Template:Infobox/Weapon', 'Template:Identification' and 'Template:Identification/Preset' templates using data from the Offical Wynncraft API.
 #### Example
 If no arguments are supplied, the script will update all instances of the template, for example:  
