@@ -68,7 +68,7 @@ class IngredientCraftingModifier(TemplateModifierBase):
             if template.has('name'):
                 api_name = template.get('name').value.strip()
             else:
-                self.current_page.name.strip()
+                api_name = self.current_page.name.strip()
 
         if api_name == "{{PAGENAME}}":
             api_name = self.current_page.name.strip()
