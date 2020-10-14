@@ -1,19 +1,20 @@
-import requests
-import converter_maps
+import requests as r
+import converter_maps as cm
 
 print("Requesting legacy item id conversions...")
-item_ids_data = requests.get("https://minecraft-ids.grahamedgecombe.com/items.json")
-items_json = item_ids_data.json()
+items_json = r.get("https://minecraft-ids.grahamedgecombe.com/items.json").json()
 print("Complete! Items Loaded: " + str(len(items_json)))
 
 """
 Sprite overrides are first to be checked for the conver_sprite() method.
 If the name paramater matches a ket in this dict, it will be returned.
 """
+# The api returns a player skull with a wither skeleton skin, providing that as an image would be redundant
 sprite_overrides = {
-    "Burnt Skull": "{{WynnIcon|wither skeleton skull}}", # The api returns a player skull with a wither skeleton skin, providing that as an image would be redundant
+    "Burnt Skull": "{{WynnIcon|wither skeleton skull}}",
     "Crumbling Skull": "{{WynnIcon|wither skeleton skull}}"
 }
+
 
 def convert_sprite(name: str, previous: str, numid: int, damage: int):
     """
@@ -31,53 +32,56 @@ def convert_sprite(name: str, previous: str, numid: int, damage: int):
 
     for current in items_json:
         if numid == current['type'] and damage == current['meta']:
-            return '{{{{ItemIcon|{}}}}}'.format(current['name'].lower())
+            return f'{{{{ItemIcon|{current["name"].lower()}}}}}'
 
-    return None
 
 def convert_range_identifications(identifications: dict):
     """
     Convert any ranged value identifications to be in the form -min/+max
     :param identifications: The dict retrived from the v2 api
     """
-    ids = {}
+    id_database = {}
     for id in identifications._data:
-        wiki_name = converter_maps.v2_to_wiki.get(id)
-        max = identifications[id].maximum
-        if max > 0:
-            max = "+" + str(max)
+        wiki_name = cm.v2_to_wiki.get(id)
+
         min = identifications[id].minimum
         if min > 0:
             min = "+" + str(min)
-        ids[wiki_name] = "{}/{}".format(min, max)
 
-    return ids
+        max = identifications[id].maximum
+        if max > 0:
+            max = "+" + str(max)
+
+        id_database[wiki_name] = f"{min}/{max}"
+
+    return id_database
+
 
 def convert_single_identifications(identifications: dict):
     """
     Convert any singular value identifications to be in the correct template form
     :param identifications: The dict retrived from the v2 api
     """
-    ids = {}
+    id_database = {}
     for id in identifications._data:
         value = identifications[id]
-        if value == 0:
-            continue
+        if value == 0: continue
 
+        wiki_name = cm.v2_to_wiki.get(id)
         if value > 0:
-            value = "+" + str(value)
+            id_database[wiki_name] = "+" + str(value)
+        else:
+            id_database[wiki_name] = value
 
-        wiki_name = converter_maps.v2_to_wiki.get(id)
-        ids[wiki_name] = value
+    return id_database
 
-    return ids
 
 def convert_position_modifiers(modifiers: dict):
     """
     Convert any position modifiers to be in the correct template form
-    :param identifications: The dict retrived from the v2 api
+    :param modifiers: The dict retrived from the v2 api
     """
-    ids = {}
+    id_database = {}
     for mod in modifiers._data:
         value = modifiers[mod]
         if value == 0:
@@ -89,6 +93,6 @@ def convert_position_modifiers(modifiers: dict):
         if mod == "notTouching":
             mod = "not_touching"
 
-        ids["effectiveness_" + mod] = value
+        id_database["effectiveness_" + mod] = value
 
-    return ids
+    return id_database
