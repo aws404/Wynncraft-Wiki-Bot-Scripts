@@ -53,7 +53,8 @@ v2_to_wiki = {
 }
 
 """
-Conversion from legacy api keys to wiki identification keys, a key ending in '-' is used to define a key wich should be taken as a literal (not rounded)
+Conversion from legacy api keys to wiki identification keys,
+a key ending in '-' is used to define a key wich should be taken as a literal (not rounded)
 """
 v1_to_wiki = {
     "healthRegen": "%_health_regen",
@@ -106,7 +107,8 @@ v1_to_wiki = {
 }
 
 """
-Conversion from legacy api keys to item infobox keys, if these keys end with a +, a plus will be appended to posative numbers
+Conversion from legacy api keys to item infobox keys, if these keys end with a +,
+a plus will be appended to posative numbers
 """
 item_info_box = {
     "displayName": "name",
