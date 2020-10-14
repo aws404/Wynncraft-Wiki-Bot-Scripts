@@ -11,7 +11,7 @@ Sprite overrides are first to be checked for the conver_sprite() method.
 If the name paramater matches a ket in this dict, it will be returned.
 """
 sprite_overrides = {
-    "Burnt Skull": "{{WynnIcon|wither skeleton skull}}",
+    "Burnt Skull": "{{WynnIcon|wither skeleton skull}}", # The api returns a player skull with a wither skeleton skin, providing that as an image would be redundant
     "Crumbling Skull": "{{WynnIcon|wither skeleton skull}}"
 }
 

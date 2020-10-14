@@ -1,5 +1,6 @@
 # Wynncraft Wiki Bot Scripts
-This is a collection of scripts that can be used to maintain the Wynncraft Wiki (https://wynncraft.gamepedia.com)
+This is a collection of scripts that can be used to maintain the Wynncraft Wiki (https://wynncraft.gamepedia.com).  
+These scripts get data from the Offical Wynncraft API (https://docs.wynncraft.com).
 
 ## Required Libraries
 ### wynn.py Wynncraft API Wrapper
@@ -43,8 +44,7 @@ A set of one or more pages can also be specified to update, for example:
 python items.py Infused_Hive_Weapons "Bob's_Mythic_Weapons" "Olux's_Prized_Weapons"
 ```  
 
-### `common.py`
-This is not a runnable script, it is a collection of common functions and tools that are used in multiple scripts
-
-### `converter_maps.py`
-This is not a runnable script, it is a collection of dictionaries used to convert various values from API names to wiki template names
+## Todo
+1. Support Accessory Infobox
+2. Add Propper Weapon Sprites
+3. Add Crafting Recipe Updating Script

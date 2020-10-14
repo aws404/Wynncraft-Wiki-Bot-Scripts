@@ -1,5 +1,4 @@
 import wynn
-import common
 import sys
 import converter_maps
 import math
