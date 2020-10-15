@@ -24,7 +24,7 @@ class InfoboxModifier(TemplateModifierBase):
             return
         item_data = None
         for current_item in items_list:
-            if current_item.name is api_name or ('displayName' in current_item and current_item.displayName == api_name):
+            if current_item.name == api_name or ('displayName' in current_item and current_item.displayName == api_name):
                 item_data = current_item
                 break
         if item_data is None:
@@ -209,7 +209,9 @@ if len(sys.argv[1:]) > 0:
     # Template Modifier for [[Template:Infobox/Weapon]]
     InfoboxModifier(wiki, 'Infobox/Weapon', summary='Bot edit, update Weapon infobox template', title_list=sys.argv[1:]).run()
     # Template Modifier for [[Template:Infobox/Armour]]
-    InfoboxModifier(wiki, 'Infobox/Armour', summary='Bot edit, update Armor infobox template', title_list=sys.argv[1:]).run()
+    InfoboxModifier(wiki, 'Infobox/Armour', summary='Bot edit, update Armour infobox template', title_list=sys.argv[1:]).run()
+    # Template Modifier for [[Template:Infobox/Accessory]]
+    InfoboxModifier(wiki, 'Infobox/Accessory', summary='Bot edit, update Accessory infobox template', title_list=sys.argv[1:]).run()
 else:
     # Template Modifier for [[Template:Identification]]
     IdentificationModifier(wiki, 'Identification', summary='Bot edit, update identification template').run()
@@ -219,3 +221,5 @@ else:
     InfoboxModifier(wiki, 'Infobox/Weapon', summary='Bot edit, update Weapon infobox template').run()
     # Template Modifier for [[Template:Infobox/Armour]]
     InfoboxModifier(wiki, 'Infobox/Armour', summary='Bot edit, update Armor infobox template').run()
+    # Template Modifier for [[Template:Infobox/Accessory]]
+    InfoboxModifier(wiki, 'Infobox/Accessory', summary='Bot edit, update Accessory infobox template').run()

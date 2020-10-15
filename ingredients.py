@@ -1,10 +1,19 @@
-import wynn
+import wynn.ingredient as api
 import common
 import sys
 from river_mwclient.gamepedia_client import GamepediaClient
 from river_mwclient.auth_credentials import AuthCredentials
 from river_mwclient.template_modifier import TemplateModifierBase
 
+"""
+Sprite overrides are first to be checked for the common.convert_sprite method.
+If the name paramater matches a ket in this dict, it will be returned.
+"""
+# The api returns a player skull with a wither skeleton skin, providing that as an image would be redundant
+sprite_overrides = {
+    "Burnt Skull": "{{WynnIcon|wither skeleton skull}}",
+    "Crumbling Skull": "{{WynnIcon|wither skeleton skull}}"
+}
 
 class IngredientInfoboxModifier(TemplateModifierBase):
     def update_template(self, template):
@@ -15,16 +24,15 @@ class IngredientInfoboxModifier(TemplateModifierBase):
         # The name to use for API-requests priorities: api-name (template param) > name (template param) > page name
         if template.has('api_name'):
             api_name = template.get('api_name').value.strip()
+        elif template.has('name'):
+            api_name = template.get('name').value.strip()
         else:
-            if template.has('name'):
-                api_name = template.get('name').value.strip()
-            else:
-                api_name = self.current_page.name.strip()
+            api_name = self.current_page.name.strip()
 
         if api_name == "{{PAGENAME}}":
             api_name = self.current_page.name.strip()
 
-        ingredient_data = wynn.ingredient.get_ingredient(api_name)
+        ingredient_data = api.get_ingredient(api_name)
         if ingredient_data is None:
             print(f"No API data was found for the ingredient with the API name '{api_name}' on the page '{self.current_page.name}'")
             return
@@ -33,21 +41,28 @@ class IngredientInfoboxModifier(TemplateModifierBase):
         skills = ""
         for skill in ingredient_data['skills']:
             skills += str.lower(skill) + ","
-        skills = skills[:-1] # Remove final comma from string
+            
         new_infobox_data = {'tier': ingredient_data['tier'],
                             'level': ingredient_data['level'],
                             'professions': skills,
                             }
+        
+        # Item name
         if 'displayName' in ingredient_data:
-            new_infobox_data['name'] = ingredient_data['displayName'].replace("֎", "")
+            new_infobox_data['name'] = ingredient_data.displayName.replace("֎", "")
         else:
-            ingredient_data['name'].replace("֎", "")
+            new_infobox_data['name'] = ingredient_data.name.replace("֎", "")
 
-        # Sprite retrival
-        last = template.get('image').value.strip() if template.has('image') else ""
-        sprite_name = common.convert_sprite(api_name, last, ingredient_data['sprite']['id'], ingredient_data['sprite']['damage'])
-        if sprite_name is not None:
-            new_infobox_data['image'] = sprite_name
+        # Sprite data
+        if api_name in sprite_overrides:
+            # Use sprite from overrides dict
+            new_infobox_data['image'] = sprite_overrides[api_name]
+        elif template.has('image') and "." in template.get('image'):
+            # Use pre-existing image
+            new_infobox_data['image'] = template.get('image')
+        else:
+            # Get id:damage to namespaced_registry name
+            new_infobox_data['image'] = common.convert_sprite(ingredient_data.sprite.id, ingredient_data.sprite.damage)
 
         # Apply new template data
         for data in new_infobox_data:
@@ -64,37 +79,45 @@ class IngredientCraftingModifier(TemplateModifierBase):
         # api-name (template param) > name (template param) > page name
         if template.has('api_name'):
             api_name = template.get('api_name').value.strip()
+        elif template.has('name'):
+            api_name = template.get('name').value.strip()
         else:
-            if template.has('name'):
-                api_name = template.get('name').value.strip()
-            else:
-                api_name = self.current_page.name.strip()
+            api_name = self.current_page.name.strip()
 
         if api_name == "{{PAGENAME}}":
             api_name = self.current_page.name.strip()
 
-        ingredient_data = wynn.ingredient.get_ingredient(api_name)
+        ingredient_data = api.get_ingredient(api_name)
         if ingredient_data is None:
             print(f"No API data was found for the ingredient with the API name '{api_name}' on the page '{self.current_page.name}'")
             return
 
         # Construction of new template data
-        new_crafting_data = {
-            **common.convert_range_identifications(ingredient_data['identifications']),
-            **common.convert_position_modifiers(ingredient_data['ingredientPositionModifiers'])
-            }
+        new_crafting_data = {**common.convert_range_identifications(ingredient_data.identifications),
+                             **common.convert_position_modifiers(ingredient_data.ingredientPositionModifiers)
+                            }
         if 'consumableOnlyIDs' in ingredient_data:
-            new_crafting_data = {**new_crafting_data, **common.convert_single_identifications(ingredient_data['consumableOnlyIDs'])}
+            new_crafting_data = new_crafting_data | common.convert_single_identifications(ingredient_data.consumableOnlyIDs)
+
         if 'itemOnlyIDs' in ingredient_data:
-            new_crafting_data = {**new_crafting_data, **common.convert_single_identifications(ingredient_data['itemOnlyIDs'])}
+            new_crafting_data = new_crafting_data | common.convert_single_identifications(ingredient_data.itemOnlyIDs)
 
-        new_crafting_data['name'] = ingredient_data['displayName'] if 'displayName' in ingredient_data else ingredient_data['name']
+        # Item Name
+        if 'displayName' in ingredient_data:
+            new_crafting_data['name'] = ingredient_data.displayName.replace("֎", "")
+        else:
+            new_crafting_data['name'] = ingredient_data.name.replace("֎", "")
 
-        # Sprite retrival
-        last = template.get('icon').value.strip() if template.has('icon') else ""
-        sprite_name = common.convert_sprite(api_name, last, ingredient_data['sprite']['id'], ingredient_data['sprite']['damage'])
-        if sprite_name is not None:
-            new_crafting_data['icon'] = sprite_name
+        # Sprite data
+        if api_name in sprite_overrides:
+            # Use sprite from overrides dict
+            new_crafting_data['icon'] = sprite_overrides[api_name]
+        elif template.has('icon') and "." in template.get('icon'):
+            # Use pre-existing image
+            new_crafting_data['icon'] = template.get('icon')
+        else:
+            # Convert id:damage to namespaced_registry name
+            new_crafting_data['icon'] = common.convert_sprite(ingredient_data.sprite.id, ingredient_data.sprite.damage)
 
         # Apply new template data
         for data in new_crafting_data:

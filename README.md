@@ -45,6 +45,5 @@ python items.py Infused_Hive_Weapons "Bob's_Mythic_Weapons" "Olux's_Prized_Weapo
 ```  
 
 ## Todo
-1. Support Accessory Infobox
-2. Add Propper Weapon Sprites
-3. Add Crafting Recipe Updating Script
+1. Add Weapon and Accessory Sprites
+2. Add Crafting Recipe Updating Script
