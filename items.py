@@ -1,5 +1,6 @@
 import wynn
 import sys
+import common
 import converter_maps as cm
 
 from river_mwclient.gamepedia_client import GamepediaClient
@@ -37,12 +38,12 @@ class InfoboxModifier(TemplateModifierBase):
                 if key in cm.item_info_box:
                     template_key = cm.item_info_box[key]
                     template_value = item_data[key]
+                    
                     if isinstance(template_value, str):
                         template_value = template_value.replace("֎", "")
                     elif isinstance(template_value, int) and template_key.find("+") != -1:
                         template_key = template_key[:-1]
-                        if template_value > 0:
-                            template_value = "+" + str(template_value)
+                        template_value = common.format_number(template_value)
 
                     template.add(template_key, template_value)
             elif key in cm.item_info_box:
@@ -112,21 +113,18 @@ class IdentificationModifier(TemplateModifierBase):
                     average_value = item_data[key]
                     if template_key.find("-") != -1:
                         template_key = template_key[:-1]
-                        if average_value > 0:
-                            value = "+" + str(average_value)
-                        else:
-                            value = str(average_value)
-
-                        template.add(template_key, value)
+                        
+                        template.add(template_key, common.format_number(average_value))
                         continue
                     elif average_value > 0:
-                        min_value = "+" + str(max(1, round(average_value * 0.3)))
-                        max_value = "+" + str(max(1, round(average_value * 1.3)))
+                        min_value = max(1, round(average_value * 0.3))
+                        max_value = max(1, round(average_value * 1.3))
                     else:
-                        min_value = str(min(-1, round(average_value * 0.7)))
-                        max_value = str(min(-1, round(average_value * 1.3)))
+                        min_value = min(-1, round(average_value * 0.7))
+                        max_value = min(-1, round(average_value * 1.3))
 
-                    template.add(template_key, min_value + "/" + max_value)
+
+                    template.add(template_key, common.format_number(min_value) + "/" + common.format_number(max_value))
             elif key in cm.v1_to_wiki:
                 # Remove the value from the template if it is now irrelevant
                 template_key = cm.v1_to_wiki[key]
@@ -181,12 +179,10 @@ class IdentificationPresetModifier(TemplateModifierBase):
             if item_data[key] and item_data[key] is not None and item_data[key] != 0:
                 if key in cm.v1_to_wiki:
                     template_key = cm.v1_to_wiki[key]
-                    average_value = item_data[key]
                     if template_key.find("-") != -1:
                         template_key = template_key[:-1]
 
-                    if average_value > 0:
-                        average_value = "+" + str(average_value)
+                    average_value = common.format_number(item_data[key])
 
                     template.add(template_key, average_value)
             elif key in cm.v1_to_wiki:
