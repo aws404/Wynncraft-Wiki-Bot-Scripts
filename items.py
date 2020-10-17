@@ -7,6 +7,11 @@ from river_mwclient.gamepedia_client import GamepediaClient
 from river_mwclient.auth_credentials import AuthCredentials
 from river_mwclient.template_modifier import TemplateModifierBase
 
+value_overrides = {
+    "Aerolia Boots": {
+        "quest": None
+    }
+}
 
 class InfoboxModifier(TemplateModifierBase):
     def update_template(self, template):
@@ -34,10 +39,13 @@ class InfoboxModifier(TemplateModifierBase):
 
         # Construction of new template data
         for key in item_data._data:
-            if item_data[key] and item_data[key] is not None and item_data[key] != "0-0" and item_data[key] != 0:
+            value = item_data[key]
+            if api_name in value_overrides and key in value_overrides[api_name]:
+                value = value_overrides[api_name][key]
+            if value and value is not None and value != "0-0" and value != 0:
                 if key in cm.item_info_box:
                     template_key = cm.item_info_box[key]
-                    template_value = item_data[key]
+                    template_value = value
                     
                     if isinstance(template_value, str):
                         template_value = template_value.replace("֎", "")
@@ -51,8 +59,8 @@ class InfoboxModifier(TemplateModifierBase):
                 template_key = cm.item_info_box[key]
                 if template_key.find("+") != -1:
                     template_key = template_key[:-1]
-                    if template.has(template_key):
-                        template.remove(template_key)
+                if template.has(template_key):
+                    template.remove(template_key)
 
         if 'skin' in item_data and item_data['skin'] is not None and item_data['skin'] != "":
             template.add('material', 'Custom')
