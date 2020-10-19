@@ -1,4 +1,4 @@
-import wynn.ingredient as api
+import wynn_api as api
 import common
 import sys
 from river_mwclient.gamepedia_client import GamepediaClient
@@ -49,9 +49,9 @@ class IngredientInfoboxModifier(TemplateModifierBase):
         
         # Item name
         if 'displayName' in ingredient_data:
-            new_infobox_data['name'] = ingredient_data.displayName.replace("֎", "")
+            new_infobox_data['name'] = ingredient_data['.displayName'].replace("֎", "")
         else:
-            new_infobox_data['name'] = ingredient_data.name.replace("֎", "")
+            new_infobox_data['name'] = ingredient_data['name'].replace("֎", "")
 
         # Sprite data
         if api_name in sprite_overrides:
@@ -62,7 +62,7 @@ class IngredientInfoboxModifier(TemplateModifierBase):
             new_infobox_data['image'] = template.get('image')
         else:
             # Get id:damage to namespaced_registry name
-            new_infobox_data['image'] = common.convert_sprite(ingredient_data.sprite.id, ingredient_data.sprite.damage)
+            new_infobox_data['image'] = common.convert_sprite(ingredient_data['sprite'].id, ingredient_data['sprite'].damage)
 
         # Apply new template data
         for data in new_infobox_data:
@@ -93,20 +93,20 @@ class IngredientCraftingModifier(TemplateModifierBase):
             return
 
         # Construction of new template data
-        new_crafting_data = {**common.convert_range_identifications(ingredient_data.identifications),
-                             **common.convert_position_modifiers(ingredient_data.ingredientPositionModifiers)
+        new_crafting_data = {**common.convert_range_identifications(ingredient_data['identifications']),
+                             **common.convert_position_modifiers(ingredient_data['ingredientPositionModifiers'])
                             }
         if 'consumableOnlyIDs' in ingredient_data:
-            new_crafting_data = new_crafting_data | common.convert_single_identifications(ingredient_data.consumableOnlyIDs)
+            new_crafting_data = new_crafting_data | common.convert_single_identifications(ingredient_data['consumableOnlyIDs'])
 
         if 'itemOnlyIDs' in ingredient_data:
-            new_crafting_data = new_crafting_data | common.convert_single_identifications(ingredient_data.itemOnlyIDs)
+            new_crafting_data = new_crafting_data | common.convert_single_identifications(ingredient_data['itemOnlyIDs'])
 
         # Item Name
         if 'displayName' in ingredient_data:
-            new_crafting_data['name'] = ingredient_data.displayName.replace("֎", "")
+            new_crafting_data['name'] = ingredient_data['displayName'].replace("֎", "")
         else:
-            new_crafting_data['name'] = ingredient_data.name.replace("֎", "")
+            new_crafting_data['name'] = ingredient_data['name'].replace("֎", "")
 
         # Sprite data
         if api_name in sprite_overrides:
@@ -117,7 +117,7 @@ class IngredientCraftingModifier(TemplateModifierBase):
             new_crafting_data['icon'] = template.get('icon')
         else:
             # Convert id:damage to namespaced_registry name
-            new_crafting_data['icon'] = common.convert_sprite(ingredient_data.sprite.id, ingredient_data.sprite.damage)
+            new_crafting_data['icon'] = common.convert_sprite(ingredient_data['sprite'].id, ingredient_data['sprite'].damage)
 
         # Apply new template data
         for data in new_crafting_data:
