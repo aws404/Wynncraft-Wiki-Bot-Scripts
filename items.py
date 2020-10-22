@@ -1,4 +1,4 @@
-import wynn
+import wynn_api as api
 import sys
 import common
 import converter_maps as cm
@@ -24,13 +24,13 @@ class InfoboxModifier(TemplateModifierBase):
         if api_name == "{{PAGENAME}}":
             api_name = self.current_page.name.strip()
 
-        items_list = wynn.item.search_item(name=api_name)
+        items_list = api.search_item(name=api_name)
         if items_list is None:
             print(f"No API data was found for the item with the API name '{api_name}' on the page '{self.current_page.name}' (Nothing on search)")
             return
         item_data = None
         for current_item in items_list:
-            if current_item.name == api_name or ('displayName' in current_item and current_item.displayName == api_name):
+            if current_item['name'] == api_name or ('displayName' in current_item and current_item['displayName'] == api_name):
                 item_data = current_item
                 break
         if item_data is None:
@@ -38,7 +38,7 @@ class InfoboxModifier(TemplateModifierBase):
             return
 
         # Construction of new template data
-        for key in item_data._data:
+        for key in item_data:
             value = item_data[key]
             if api_name in value_overrides and key in value_overrides[api_name]:
                 value = value_overrides[api_name][key]
@@ -93,13 +93,13 @@ class IdentificationModifier(TemplateModifierBase):
             if api_name is None:
                 api_name = self.current_page.name
 
-        items_list = wynn.item.search_item(name=api_name)
+        items_list = api.search_item(name=api_name)
         if items_list is None:
             print(f"No API data was found for the item with the API name '{api_name}' on the page '{self.current_page.name}' (Nothing on search)")
             return
         item_data = None
         for current_item in items_list:
-            if ('displayName' in current_item and current_item.displayName == api_name) or current_item.name == api_name:
+            if ('displayName' in current_item and current_item['displayName'] == api_name) or current_item['name'] == api_name:
                 item_data = current_item
                 break
         if item_data is None:
@@ -107,14 +107,14 @@ class IdentificationModifier(TemplateModifierBase):
             return
 
         # Swap to the Identification/Preset if the item is pre-identified
-        if 'identified' in item_data and item_data.identified:
+        if 'identified' in item_data and item_data['identified']:
             print(f"The item '{self.current_page.name}' on the page '{api_name}' was using the incorrect identification template, fixing it now")
             template.name = 'Identification/Preset'
             IdentificationPresetModifier.update_template(self, template)
             return
 
         # Construction of new template data
-        for key in item_data._data:
+        for key in item_data:
             if item_data[key] and item_data[key] is not None and item_data[key] != 0:
                 if key in cm.v1_to_wiki:
                     template_key = cm.v1_to_wiki[key]
@@ -162,13 +162,13 @@ class IdentificationPresetModifier(TemplateModifierBase):
             if api_name is None:
                 api_name = self.current_page.name
 
-        items_list = wynn.item.search_item(name=api_name)
+        items_list = api.search_item(name=api_name)
         if items_list is None:
             print(f"No API data was found for the item with the API name '{api_name}' on the page '{self.current_page.name}' (Nothing on search)")
             return
         item_data = None
         for current_item in items_list:
-            if ('displayName' in current_item and current_item.displayName == api_name) or current_item.name == api_name:
+            if ('displayName' in current_item and current_item['displayName'] == api_name) or current_item['name'] == api_name:
                 item_data = current_item
                 break
         if item_data is None:
@@ -176,14 +176,14 @@ class IdentificationPresetModifier(TemplateModifierBase):
             return
 
         # Swap to the Identification if the item is not pre-identified
-        if 'identified' not in item_data or ('identified' in item_data and not item_data.identified):
+        if 'identified' not in item_data or ('identified' in item_data and not item_data['identified']):
             print(f"The item '{self.current_page.name}' on the page '{api_name}' was using the incorrect identification template, fixing it now")
             template.name = 'Identification'
             IdentificationModifier.update_template(self, template)
             return
 
         # Construction of new template data
-        for key in item_data._data:
+        for key in item_data:
             if item_data[key] and item_data[key] is not None and item_data[key] != 0:
                 if key in cm.v1_to_wiki:
                     template_key = cm.v1_to_wiki[key]
