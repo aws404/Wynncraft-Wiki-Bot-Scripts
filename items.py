@@ -10,6 +10,18 @@ from river_mwclient.template_modifier import TemplateModifierBase
 value_overrides = {
     "Aerolia Boots": {
         "quest": None
+    },
+    "Ornate Shadow Cloud": {
+        "armorColor": "50,34,63"
+    },
+    "Ornate Shadow Cover": {
+        "armorColor": "50,34,63"
+    },
+    "Ornate Shadow Garb": {
+        "armorColor": "50,34,63"
+    },
+    "Ornate Shadow Cowl": {
+        "armorColor": "50,34,63"
     }
 }
 
